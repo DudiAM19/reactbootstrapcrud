@@ -1,0 +1,15 @@
+{
+    "contacts": [
+        {
+            "id": 1,
+            "name":"Dudi Ali",
+            "email":"Dudiali79@gmail.com"
+        },
+        {
+            "id": 2,
+            "name": "Bambang",
+            "email": "bambang@email.com"
+        }
+    ]
+    
+}
