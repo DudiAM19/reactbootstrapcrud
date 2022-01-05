@@ -1,4 +1,4 @@
-import { Button, Table } from 'react-bootstrap';
+import { Button, Table, Form } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import axios from "axios";
@@ -8,6 +8,17 @@ const url = 'https://61571c4b8f7ea600179850ae.mockapi.io/contact';
 function Home() {
 
     const [user, setUser] = useState([]);
+    const [search, setSearch] = useState('')
+
+    const handleSearch = (e) => {
+        setSearch(e.target.value)
+    }
+
+    const filtered = !search 
+        ? user
+        : user.filter((person) => 
+            person.name.toLowerCase().includes(search.toLowerCase())
+        );
 
     const getUser = async () => {
         try {
@@ -18,9 +29,19 @@ function Home() {
             console.error(error);
         }
     }
+    
+    const getMovie = async () => {
+        try {
+            const res = await axios.get('https://61981d74164fa60017c22f73.mockapi.io/contact')
+            console.log(res.data)
+            setUser(res.data)
+        } catch (error) {
+            console.error(error)
+        }
+    }
 
     useEffect(() => {
-        getUser()
+        getMovie()
     }, []);
 
     const Delete = async (id) => {
@@ -30,6 +51,8 @@ function Home() {
 
     return (
         <div>
+
+            <Form.Control className='mt-2 mb-4' placeholder='Search User' type='text' value={search} onChange={handleSearch} />
             <div>
                 <Table striped bordered hover variant="dark">
                     <thead>
@@ -40,8 +63,7 @@ function Home() {
                             <th>Action</th>
                         </tr>
                     </thead>
-
-                    {user.map((data, index) => (
+                    {filtered.map((data, index) => (
                         <tbody key={data.id}>
                             <tr>
                                 <th>{index + 1}</th>
@@ -54,7 +76,6 @@ function Home() {
                             </tr>
                         </tbody>
                     ))}
-
                 </Table>
             </div>
         </div>
